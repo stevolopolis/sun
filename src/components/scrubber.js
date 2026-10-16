@@ -1,6 +1,5 @@
 // A play/pause button and a slider over values, after Mike Bostock's Scrubber (ISC).
 import {html} from "npm:htl";
-import * as Inputs from "npm:@observablehq/inputs";
 
 export function Scrubber(values, {format = (value) => value, initial = 0, delay = 400} = {}) {
   values = Array.from(values);
@@ -12,7 +11,11 @@ export function Scrubber(values, {format = (value) => value, initial = 0, delay 
   let interval = null;
   function start() {
     form.b.textContent = "Pause";
-    interval = setInterval(() => jump(form.i.valueAsNumber + 1), delay);
+    interval = setInterval(tick, delay);
+  }
+  function tick() {
+    if (!form.isConnected) return stop(); // the page has replaced this form
+    jump(form.i.valueAsNumber + 1);
   }
   function stop() {
     form.b.textContent = "Play";
@@ -32,6 +35,5 @@ export function Scrubber(values, {format = (value) => value, initial = 0, delay 
   form.jump = jump;
   form.i.oninput();
   stop();
-  Inputs.disposal(form).then(stop);
   return form;
 }
