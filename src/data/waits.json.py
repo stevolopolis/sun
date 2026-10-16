@@ -77,9 +77,9 @@ def _typical_days(waits):
     weekday = pd.to_datetime(per_day.day).dt.weekday
     per_day["day_type"] = weekday.map({5: "saturday", 6: "sunday"}).fillna("weekday")
     n_days = per_day.groupby("day_type").day.nunique()
-    typical = per_day.groupby(["complex_id", "day_type", "step"]).wait.agg(["median", "size"])
+    typical = per_day.groupby(["complex_id", "day_type", "step"]).wait.agg(["median", "count"])
     days_of_type = n_days.reindex(typical.index.get_level_values("day_type")).values
-    served = typical["size"] * 2 >= days_of_type
+    served = typical["count"] * 2 >= days_of_type  # a window of zero gaps has no wait
     return typical.loc[served, "median"], n_days  # a step counts when served on half its days
 
 
