@@ -6,6 +6,12 @@ This is an [Observable Framework](https://observablehq.com/framework/) app. To i
 npm install
 ```
 
+The data loaders in `src/data` that end in `.py` need Python 3 with pandas:
+
+```
+pip install -r requirements.txt
+```
+
 Then, to start the local preview server, run:
 
 ```
