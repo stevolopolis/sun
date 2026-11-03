@@ -1,5 +1,11 @@
 # Sun
 
+## Dataset
+
+This project uses daily observations from NOAA’s [Global Surface Summary of the Day (GSOD) archive](https://www.ncei.noaa.gov/data/global-summary-of-the-day/access/), organized by year. More information about the dataset is available on [Data.gov](https://catalog.data.gov/dataset/global-surface-summary-of-the-day-gsod).
+
+## Getting started
+
 This is an [Observable Framework](https://observablehq.com/framework/) app. To install the required dependencies, run:
 
 ```
