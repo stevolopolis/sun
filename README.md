@@ -1,59 +1,34 @@
 # Sun
 
-This is an [Observable Framework](https://observablehq.com/framework/) app. To install the required dependencies, run:
+Team 7 · Daeun Park, Abrar Zaki, Steven Tin Sui Luo
 
-```
-npm install
-```
+An Observable Framework app comparing daily and seasonal temperatures for six station pairs using NOAA GSOD observations.
 
-Then, to start the local preview server, run:
+## Run locally
 
-```
+With Node.js 18 or later:
+
+```sh
+npm ci
 npm run dev
 ```
 
-Then visit <http://localhost:3000> to preview your app.
+Open the [Milestone 3 overview](http://localhost:3000/milestone-3) after the preview server starts. The overview and the Milestone 3 sidebar link to all six question pages.
 
-For more, see <https://observablehq.com/framework/getting-started>.
+On Q1 and Q2, use **Station pair** to update the sample tables and chart. Expand **View D3 source code** below the chart to read the implementation. The explanation below the code describes what the chart shows.
 
-## Project structure
+Run `npm run build` to create the static site in `dist/`.
 
-A typical Framework project looks like this:
+## Temperature analysis tables
 
-```ini
-.
-├─ src
-│  ├─ components
-│  │  └─ timeline.js           # an importable module
-│  ├─ data
-│  │  ├─ launches.csv.js       # a data loader
-│  │  └─ events.json           # a static data file
-│  ├─ example-dashboard.md     # a page
-│  ├─ example-report.md        # another page
-│  └─ index.md                 # the home page
-├─ .gitignore
-├─ observablehq.config.js      # the app config file
-├─ package.json
-└─ README.md
+Regenerate the three tables from the supplied 12-station NOAA GSOD merged CSV:
+
+```sh
+python3 scripts/summarize-temperatures.py /path/to/gsod_all_12_stations_1973_2025.csv
 ```
 
-**`src`** - This is the “source root” — where your source files live. Pages go here. Each page is a Markdown file. Observable Framework uses [file-based routing](https://observablehq.com/framework/project-structure#routing), which means that the name of the file controls where the page is served. You can create as many pages as you like. Use folders to organize your pages.
+Both questions use January 1973 through December 2024 (52 complete calendar years, 18,993 calendar days per station). Partial 2025 is excluded. Temperatures are in °F. Blank values and the missing-value codes `999.9` and `9999.9` are excluded separately for `MAX`, `MIN`, and `TEMP`. Counts distinguish days with a source row from days with a usable value.
 
-**`src/index.md`** - This is the home page for your app. You can have as many additional pages as you’d like, but you should always have a home page, too.
-
-**`src/data`** - You can put [data loaders](https://observablehq.com/framework/data-loaders) or static data files anywhere in your source root, but we recommend putting them here.
-
-**`src/components`** - You can put shared [JavaScript modules](https://observablehq.com/framework/imports) anywhere in your source root, but we recommend putting them here. This helps you pull code out of Markdown files and into JavaScript modules, making it easier to reuse code across pages, write tests and run linters, and even share code with vanilla web applications.
-
-**`observablehq.config.js`** - This is the [app configuration](https://observablehq.com/framework/config) file, such as the pages and sections in the sidebar navigation, and the app’s title.
-
-## Command reference
-
-| Command           | Description                                              |
-| ----------------- | -------------------------------------------------------- |
-| `npm install`            | Install or reinstall dependencies                        |
-| `npm run dev`        | Start local preview server                               |
-| `npm run build`      | Build your static site, generating `./dist`              |
-| `npm run deploy`     | Deploy your app to Observable                            |
-| `npm run clean`      | Clear the local data loader cache                        |
-| `npm run observable` | Run commands like `observable help`                      |
+- **Q1** [Daily temperature distributions](src/data/q1-temperature-distributions.csv) has one row per station and metric, with valid-day counts, observed extremes, inclusive quartiles, IQR, and Tukey whiskers. Use a shared °F domain for the MAX and MIN boxplots across station pairs. The daily range is calculated from same-day MAX minus MIN when both values are valid and MAX is at least MIN.
+- **Q2** [Monthly temperatures](src/data/q2-monthly-temperatures.csv) has one row per station and calendar month. Each mean pools valid daily TEMP observations for that month across the analysis period. January through December stay in calendar order at every station, so cross-hemisphere peak timing is visible.
+- **Q2** [Pair baselines and coverage](src/data/q2-pair-baselines.csv) lists station IDs, daily-observation-weighted mean TEMP over the analysis period, the absolute pair gap, peak and trough months, and seasonal span (warmest minus coldest monthly mean). The working match criterion is an absolute baseline gap of at most 2 °F. The coverage audit counts absent calendar dates separately from recorded days with missing TEMP. Bole has 13,114 of 18,993 days (69.0% coverage), so its baseline and seasonal curve reflect a substantially smaller set of observations than Atlanta's.
