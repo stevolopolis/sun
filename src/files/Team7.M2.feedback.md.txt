@@ -1,0 +1,79 @@
+# Team 7 — Sun
+Daeun Park, Abrar Zaki, Steven Tin Sui Luo
+
+**Scope check:** Much better focused. Six paired-temperature questions replace the broad climate survey. Twelve stations over 53 years are manageable with precomputed summaries, but the analysis rules still need to become processed results.
+
+## Summary
+
+Your anchor is now “Do similar average temperatures hide different extremes?” You select six station pairs and propose distributions, seasonal cycles, extreme-day frequencies, spells, long-term change, and seasonal transitions. The report shows sketches and a small common data excerpt, but most question-specific transformations remain descriptions of what you will extract.
+
+## What's working
+
+- The motivation and questions now align around temperature rather than promising unmeasured pressure or storm mechanisms.
+- Named pairs and climate contrasts make the project concrete, and the distribution view directly supports the anchor question.
+- Units, sentinel values, and the distinction between pair/station identifiers are described.
+
+## Response to Milestone 1 feedback
+
+1. **Goal and questions — addressed.** You adopt a coherent temperature comparison and remove the earlier mismatch. Explicitly summarize the change from the eight-question proposal so readers can track what was dropped.
+2. **Station sample — partly addressed.** Twelve named stations, the 1973–August 2025 period, and reliability criteria are a major improvement. Supply station IDs, a common averaging period, actual computed means and pair differences, and a coverage audit to support the claim of unbroken records. Approximate averages alone do not demonstrate the matching rule.
+3. **Anchor comparison — substantially addressed.** Paired high/low distributions and seasonal curves answer it well. Define a numeric mean-matching tolerance and the measures of extreme contrast rather than relying only on climate labels.
+4. **Encodings — improved, with unfinished details.** The sketches specify axes and several controls. Shared scales, exact extreme thresholds, and question-specific summary tables are still needed to make all six designs implementable.
+
+## Points to think through before Milestone 3
+
+### Data handling & understanding
+
+1. **Turn the descriptions into processed tables.** M2 asks for transformed results for every question. A merged station-day file can support several questions, but it does not demonstrate quartiles, monthly means, valid-day rates, spell lengths, or transition dates. Show a few real rows of each derived output, or a shared table whose fields clearly support them.
+2. **Make missingness part of the calculations.** Keeping original NOAA sentinels in raw files is fine; convert them to missing before deriving statistics. Document field-specific markers and valid-day denominators. A missing calendar day must not silently join two extreme spells.
+3. **Define thresholds and incomplete years.** Q3 uses roughly 90°F/32°F while Q4 suggests 90°F/−10°F, and it is unclear whether MAX, MIN, or TEMP determines a spell. Choose exact inequalities and explain differing definitions. Do not compare partial 2025 annual counts with full earlier years without a matched window or valid-day rate.
+
+### Question-by-question feedback
+
+| Question | Data and sketch feedback / next step |
+|---|---|
+| Q1 Distributions | Provide quartiles and valid observations per station on shared axes. The difference between two marginal boxplot medians is not the distribution of daily MAX−MIN; compute daily range separately if you discuss it. |
+| Q2 Seasonality | Show station-month means and exposure counts for one common period. State whether cross-hemisphere seasons remain calendar-aligned or are shifted. |
+| Q3 Extreme frequency | Give exact hot/freezing definitions, valid-day denominators, and a processed frequency sample; label percentages as recorded-day rates. |
+| Q4 Spells | Provide start/end dates, duration, threshold variable, and gap treatment for example events. A daily line alone does not summarize persistence. |
+| Q5 Change over time | Show annual or matched-window means and extreme metrics, with coverage and the pair's mean difference over time. |
+| Q6 Transitions | Define a reproducible transition date/duration and threshold-crossing rule; the proposed daily-temperature view otherwise overlaps Q2/Q4. |
+
+### Project setup & sharing
+
+- **Repository:** A local Framework starter is present, but the report does not provide a clear GitHub repository URL. The included dataset ZIP is useful supporting material, not a substitute for that link. The Framework starter contains example pages that come default with newly-created projects and does not contain any of the required elements specified for Milestone #2 (e.g. AI Disclosure, links to datasets).
+- **Confirmed instructor access:** Repository access was provided to `kimryan0416`.
+- **Data access:** The README links the GSOD archive. Add the twelve station IDs, exact annual-file paths, period, and steps to recreate the merged files.
+- **AI disclosure:** The PDF discloses assistance with station selection and merging. An easily findable project AI-use statement was not found in the local README. Further details are needed for a proper AI usage disclosure, including which model(s) were used, where they were used, for what purposes, and which works were performed by the AI and which were manual work.
+- **Observable, if applicable:** The local project uses Framework and does not record any usage of Observable notebooks.
+
+## Recommended design direction
+
+Reuse one pair and time-window selection. Keep distributions and seasonal means as the core, with extreme rates and spells as detail. Distinguish the long-term trend and transition questions with their own derived measures.
+
+## Optional extension
+
+Feels-like measures remain optional and are unnecessary for the revised temperature story.
+
+## Milestone 3 (Due Nov 16)
+
+Submit a write-up accessible through your GitHub repository, with the team name and members, a brief introduction, and, for each domain question, the question, a working D3 visualization and its code, and an explanation of what it shows. Put clear access and run instructions in the README or an obvious project page. Included interactions should work; basic implementation comes before polish. Organize the views in a readable narrative with clear sections or navigation.
+
+Keep the submitted M2 content as a separate milestone record; do not overwrite it. Include an easily findable AI-use statement, even if none was used. If AI was used, identify the models/tools, where they helped, and how much was AI-assisted versus your own work, with notices in the write-up where appropriate.
+
+Prioritize verified pair means/coverage and the derived tables, then implement the six questions with shared D3 controls.
+
+## Milestones
+
+*Dates from the M1 feedback; M3 requirements from the M3 assignment.*
+
+| Milestone | Due | Deliverable |
+|---|---|---|
+| 1. Proposal | Oct 19 | Done |
+| 2. Data analysis & sketches | Nov 2 | Done |
+| 3. First draft | Nov 16 | Repository-accessible write-up with D3 views, code, findings, and run instructions |
+| 4. Second draft | Nov 30 | Complete article: title, introduction, data, questions and findings, conclusion |
+| 5. Final submission | Dec 7 | Final notebook or interface, code repository with documentation, team contribution statement |
+| Presentation | Dec 11 | 10 minutes + Q&A |
+
+
