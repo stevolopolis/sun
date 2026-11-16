@@ -1,10 +1,6 @@
 import * as d3 from "npm:d3";
 
 const colors = ["#2378a4", "#bd5639"];
-const windows = [
-  {label: "day", days: 1}, {label: "week", days: 7}, {label: "month", days: 30},
-  {label: "season", days: 91}, {label: "year", days: 365},
-];
 const spans = [
   {label: "3 months", tick: "3 mo", months: 3}, {label: "6 months", tick: "6 mo", months: 6},
   {label: "1 year", tick: "1 yr", months: 12}, {label: "2 years", tick: "2 yr", months: 24},
@@ -15,21 +11,6 @@ const height = 360;
 const monthLabel = d3.utcFormat("%b %Y");
 const dayLabel = d3.utcFormat("%b %-d, %Y");
 const degrees = value => `${value.toFixed(1)} °F`;
-
-function movingAverage(values, days) {
-  const sum = new Float64Array(values.length + 1), count = new Float64Array(values.length + 1);
-  values.forEach((value, i) => {
-    const valid = Number.isFinite(value);
-    sum[i + 1] = sum[i] + (valid ? value : 0);
-    count[i + 1] = count[i] + valid;
-  });
-  const before = Math.floor((days - 1) / 2), after = days - 1 - before;
-  return values.map((_, i) => {
-    const i0 = Math.max(0, i - before), i1 = Math.min(values.length, i + after + 1);
-    const n = count[i1] - count[i0];
-    return n >= days / 2 ? (sum[i1] - sum[i0]) / n : NaN; // gap if under half the window has data
-  });
-}
 
 function slider(parent, label, max, ticks, onInput) {
   const control = parent.append("label").style("display", "grid").style("gap", "4px")
@@ -59,20 +40,14 @@ function key(parent, swatch, text) {
 
 export function transitionFigure(width, rows, stations, state) {
   const dates = rows.map(d => new Date(d.date));
-  const raw = stations.map(s => Float64Array.from(rows,
+  const series = stations.map(s => Float64Array.from(rows,
     d => d[s.station_id] === "" ? NaN : +d[s.station_id]));
   const firstYear = dates[0].getUTCFullYear();
   const months = 12 * (dates.at(-1).getUTCFullYear() - firstYear + 1);
   const monthDate = m => new Date(Date.UTC(firstYear + Math.floor(m / 12), m % 12, 1));
   const dayIndex = m => Math.round((monthDate(m) - dates[0]) / 864e5);
-  const y = d3.scaleLinear(d3.extent(raw.flatMap(v => d3.extent(v))),
+  const y = d3.scaleLinear(d3.extent(series.flatMap(v => d3.extent(v))),
     [height - margin.bottom, margin.top]).nice();
-  const smoothed = new Map();
-  const smooth = w => {
-    if (!smoothed.has(w)) smoothed.set(w, raw.map(v => movingAverage(v, windows[w].days)));
-    return smoothed.get(w);
-  };
-
   const root = d3.create("div").style("display", "grid").style("gap", "12px");
   root.append("div").style("font-weight", 600).text("Temperature at the two stations");
   const controls = root.append("div").style("display", "grid").style("gap", "12px 24px")
@@ -81,8 +56,6 @@ export function transitionFigure(width, rows, stations, state) {
     state[field] = +event.target.value;
     draw();
   };
-  const windowControl = slider(controls, "Averaging window", windows.length - 1,
-    windows.map(d => d.label), update("window"));
   const spanControl = slider(controls, "Span shown", spans.length - 1, spans.map(d => d.tick),
     update("span"));
   const startControl = slider(controls, "Start", months - 1, null, update("start"));
@@ -94,8 +67,7 @@ export function transitionFigure(width, rows, stations, state) {
     const span = spans[state.span].months;
     state.start = Math.min(state.start, months - span);
     const i0 = dayIndex(state.start), i1 = dayIndex(state.start + span);
-    const series = smooth(state.window);
-    const averages = raw.map(v => d3.mean(v.subarray(i0, i1)));
+    const averages = series.map(v => d3.mean(v.subarray(i0, i1)));
     const period = [state.start, state.start + span - 1].map(m => monthLabel(monthDate(m)))
       .join(" – ");
     const x = d3.scaleUtc([monthDate(state.start), monthDate(state.start + span)],
@@ -103,7 +75,6 @@ export function transitionFigure(width, rows, stations, state) {
 
     startControl.input.max = months - span;
     for (const [control, value, text] of [
-      [windowControl, state.window, windows[state.window].label],
       [spanControl, state.span, spans[state.span].label],
       [startControl, state.start, period],
     ]) {
@@ -120,7 +91,7 @@ export function transitionFigure(width, rows, stations, state) {
 
     const svg = d3.create("svg").attr("viewBox", [0, 0, width, height]).attr("role", "img")
       .attr("aria-label", `Daily mean temperature at ${stations.map(d => d.station).join(" and ")},`
-        + ` ${windows[state.window].label} average, ${period}`)
+        + ` ${period}`)
       .style("display", "block").style("max-width", "100%").style("touch-action", "pan-y");
     svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`)
       .call(d3.axisBottom(x).ticks(Math.max(2, Math.floor(width / 90))));
@@ -140,7 +111,7 @@ export function transitionFigure(width, rows, stations, state) {
       const line = d3.line().defined(i => !Number.isNaN(values[i]))
         .x(i => x(dates[i])).y(i => y(values[i]));
       plot.append("path").attr("d", line(indices)).attr("fill", "none").attr("stroke", colors[k])
-        .attr("stroke-width", state.window ? 2 : 1.5);
+        .attr("stroke-width", 1.5);
     });
 
     const focus = svg.append("g").attr("display", "none");
