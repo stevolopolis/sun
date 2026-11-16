@@ -1,11 +1,11 @@
-"""Generate the Q1 and Q2 visualization tables from the merged GSOD CSV."""
+"""Generate the Q1, Q2 and Q6 visualization tables from the merged GSOD CSV."""
 import calendar
 import csv
 import math
 import statistics
 import sys
 from collections import defaultdict
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 START, END = date(1973, 1, 1), date(2024, 12, 31)
@@ -50,11 +50,20 @@ def summarize(source):
     if len(stations) != 12:
         raise ValueError(f"Expected 12 stations, got {len(stations)}")
 
-    distributions, months, pairs = [], [], []
-    pair_members = defaultdict(list)
-    for metadata, days in sorted(stations.values(), key=lambda station: (
+    ordered = sorted(stations.values(), key=lambda station: (
         station[0]["pair_id"], station[0]["station_role"]
-    )):
+    ))
+    distributions, months, pairs, daily = [], [], [], []
+    pair_members = defaultdict(list)
+    for offset in range(EXPECTED):
+        day = START + timedelta(days=offset)
+        row = {"date": day.isoformat()}
+        for metadata, days in ordered:
+            value = days.get(day, {}).get("TEMP")
+            row[metadata["station_id"]] = "" if value is None else value
+        daily.append(row)
+
+    for metadata, days in ordered:
         ranges = []
         for record in days.values():
             high, low = record["MAX"], record["MIN"]
@@ -104,6 +113,7 @@ def summarize(source):
     write_table("q1-temperature-distributions.csv", distributions)
     write_table("q2-monthly-temperatures.csv", months)
     write_table("q2-pair-baselines.csv", pairs)
+    write_table("q6-daily-temperatures.csv", daily)
 
 
 if __name__ == "__main__":
