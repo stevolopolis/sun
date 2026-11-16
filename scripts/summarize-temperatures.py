@@ -1,4 +1,4 @@
-"""Generate the Q1, Q2 and Q6 visualization tables from the merged GSOD CSV."""
+"""Generate the Q0, Q1 and Q2 visualization tables from the merged GSOD CSV."""
 import calendar
 import csv
 import math
@@ -113,7 +113,7 @@ def summarize(source):
     write_table("q1-temperature-distributions.csv", distributions)
     write_table("q2-monthly-temperatures.csv", months)
     write_table("q2-pair-baselines.csv", pairs)
-    write_table("q6-daily-temperatures.csv", daily)
+    write_table("q0-daily-temperatures.csv", daily)
 
 
 if __name__ == "__main__":

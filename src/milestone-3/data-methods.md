@@ -27,8 +27,8 @@ The common period contains 18,993 calendar days per station. Bole International 
 
 Blank or non-finite values and the missing-value codes `999.9` and `9999.9` are treated as missing separately for daily maximum (MAX), daily minimum (MIN), and daily mean temperature (TEMP). Valid-day counts reflect usable observations for the measure being summarized. Absent days count dates with no station record.
 
+- [Q0](./q0) plots each station's daily TEMP as recorded, with no aggregation. It is an exploration aid for choosing the Q5 and Q6 features.
 - [Q1](./q1) computes quartiles for daily highs and lows separately. Daily ranges use the same day's MAX minus MIN when both are valid and MAX is at least MIN.
 - [Q2](./q2) pools valid TEMP observations by calendar month across the common period. The x-axis uses January through December for both hemispheres.
-- [Q6](./q6) plots each station's daily TEMP. The findings smooth it with a centered 7-day or 30-day moving average, leaving a gap where fewer than half the days in the window are valid. A crossing runs from the last day at or below the pair's long-term mean minus 5 °F to the first day at or above the mean plus 5 °F, or the reverse. A gap in the average restarts the count.
 
 The [Milestone 2 page](../milestone-2) includes the merged source dataset. The repository's README documents how to regenerate the summary tables.

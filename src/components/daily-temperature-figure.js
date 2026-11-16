@@ -38,7 +38,7 @@ function key(parent, swatch, text) {
   item.append("span").text(text);
 }
 
-export function transitionFigure(width, rows, stations, state) {
+export function dailyTemperatureFigure(width, rows, stations, state) {
   const dates = rows.map(d => new Date(d.date));
   const series = stations.map(s => Float64Array.from(rows,
     d => d[s.station_id] === "" ? NaN : +d[s.station_id]));
