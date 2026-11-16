@@ -1,42 +1,20 @@
 # Data & Methods
 
-We use daily NOAA Global Surface Summary of the Day (GSOD) observations for 12 stations grouped into six pairs. The analysis covers January 1, 1973 through December 31, 2024. The source file also contains part of 2025, which we excluded to use the same complete calendar years for every station.
+## Dataset
 
-## Station pairs and coverage
+This project uses daily observations from NOAA’s [Global Surface Summary of the Day (GSOD) archive](https://www.ncei.noaa.gov/data/global-summary-of-the-day/access/), organized by year. More information about the dataset is available on [Data.gov](https://catalog.data.gov/dataset/global-surface-summary-of-the-day-gsod).
 
-For each station, the long-term mean weights each valid daily mean temperature (TEMP) equally. A pair meets our working matching criterion if the two means differ by at most 2 °F. All six pairs meet this criterion, with gaps from 0.11 to 0.47 °F. The pair gap appears on both station rows.
+TODO: how you changed from original to ${html`<a download="gsod_all_12_stations_1973_2025.csv" href="${await FileAttachment("../data/gsod_all_12_stations_1973_2025.csv").url()}">gsod_all_12_stations_1973_2025.csv</a>`}
 
-```js
-const baselines = await FileAttachment("../data/q2-pair-baselines.csv").csv();
-```
+TODO: pairs introduction
 
-```js
-Inputs.table(baselines, {
-  columns: ["pair_id", "station_name", "station_id", "annual_baseline_f", "baseline_gap_f",
-    "recorded_days", "valid_temp_days", "absent_days"],
-  header: {pair_id: "Pair", station_name: "Station", station_id: "GSOD ID",
-    annual_baseline_f: "Mean (°F)", baseline_gap_f: "Pair gap (°F)",
-    recorded_days: "Recorded days", valid_temp_days: "Valid TEMP days", absent_days: "Absent days"},
-  rows: 12,
-})
-```
+FEEDBACK:
 
-The common period contains 18,993 calendar days per station. Bole International has records for 13,114 days (69.0%), compared with 18,993 days at its paired Atlanta station. The two estimates therefore reflect different sets of observed days.
-
-## Missing observations and aggregation
-
-Blank or non-finite values and the missing-value codes `999.9` and `9999.9` are treated as missing separately for daily maximum (MAX), daily minimum (MIN), and daily mean temperature (TEMP). Valid-day counts reflect usable observations for the measure being summarized. Absent days count dates with no station record.
-
-- [Q1](./q1) computes quartiles for daily highs and lows separately. Daily ranges use the same day's MAX minus MIN when both are valid and MAX is at least MIN.
-- [Q2](./q2) pools valid TEMP observations by calendar month across the common period. The x-axis uses January through December for both hemispheres.
-- [Q5](./q5) takes, for each station and calendar year, the highest, average and lowest daily TEMP. A station-year with fewer than 300 valid TEMP days is treated as missing and shown as a gap.
-- [Q6](./q6) compares each day's TEMP with the centered 15-day average (the day and 7 days on each side), computed over valid days only and left blank when fewer than 8 of the 15 days are valid. For each station and year it takes the largest absolute difference over days where both values exist. A year with fewer than 300 such days is shown as a gap.
-
-The [Milestone 2 page](../milestone-2) includes the merged source dataset. The repository's README documents how to regenerate the summary tables.
+GSOD archive. Add the twelve station IDs, exact annual-file paths, period, and steps to recreate the merged files.
 
 ### Q1
 
-We started with the [merged source dataset](../milestone-2), which has one row per station per day. We used `STATION` and `DATE` to group records by station and identify each observation day, then kept only records from 1973 through 2024 because 2025 is incomplete. For each station, we excluded blank values and NOAA missing-value codes (`999.9` and `9999.9`) separately for daily highs (`MAX`) and lows (`MIN`). We calculated the daily range as `MAX − MIN` on dates when both values were valid and the high was at least as large as the low.
+We started with ${html`<a download="gsod_all_12_stations_1973_2025.csv" href="${await FileAttachment("../data/gsod_all_12_stations_1973_2025.csv").url()}">gsod_all_12_stations_1973_2025.csv</a>`}, which has one row per station per day. We used `STATION` and `DATE` to group records by station and identify each observation day, then kept only records from 1973 through 2024 because 2025 is incomplete. For each station, we excluded blank values and NOAA missing-value codes (`999.9` and `9999.9`) separately for daily highs (`MAX`) and lows (`MIN`). We calculated the daily range as `MAX − MIN` on dates when both values were valid and the high was at least as large as the low.
 
 For each station, we counted the valid days and calculated the 25th percentile, median, and 75th percentile for daily highs, daily lows, and daily ranges. We wrote one row per station and measure to `q1-temperature-distributions.csv`, for 36 rows in total.
 
@@ -71,9 +49,63 @@ display(Inputs.table(q1Data, {
 
 ${html`<a download="q1-temperature-distributions.csv" href="${q1DownloadUrl}">Download q1-temperature-distributions.csv</a>`}
 
+### Q2
+
+We started with ${html`<a download="gsod_all_12_stations_1973_2025.csv" href="${await FileAttachment("../data/gsod_all_12_stations_1973_2025.csv").url()}">gsod_all_12_stations_1973_2025.csv</a>`} and kept daily records from 1973 through 2024. We excluded blank and missing-value codes from daily mean temperatures before grouping valid observations (`TEMP`) by station and calendar month. Each monthly mean uses all valid daily observations for that month across the period. We also calculated each station’s long-term mean from all valid daily observations, the difference between its warmest and coldest monthly means, and the difference between long-term means within each pair. We saved 144 station-month rows to `q2-monthly-temperatures.csv` and 12 station summary rows to `q2-pair-baselines.csv`.
+
+[Python script for Q2](https://github.com/daeunppark/sun/blob/main/scripts/summarize-temperatures.py#L97-L125)
+
+#### Final tables
+
+##### Monthly temperatures
+
+```js
+const q2Monthly = await FileAttachment("../data/q2-monthly-temperatures.csv").csv({typed: true});
+const q2MonthlyHeaders = {pair_id: "Pair", station_name: "Station", month: "Month", mean_temp_f: "Mean (°F)",
+    valid_temp_days: "Valid days", calendar_days: "Calendar days"};
+const q2MonthlyColumns = Object.keys(q2MonthlyHeaders);
+const q2MonthlyCsv = d3.csvFormatRows([
+  Object.values(q2MonthlyHeaders),
+  ...q2Monthly.map(row => q2MonthlyColumns.map(column => row[column]))
+]);
+const q2MonthlyDownloadUrl = "data:text/csv;charset=utf-8," + encodeURIComponent(q2MonthlyCsv);
+
+display(Inputs.table(q2Monthly, {
+  columns: q2MonthlyColumns,
+  header: q2MonthlyHeaders,
+  rows: 6
+}));
+```
+
+${html`<a download="q2-monthly-temperatures.csv" href="${q2MonthlyDownloadUrl}">Download q2-monthly-temperatures.csv</a>`}
+
+##### Station and pair summary
+
+```js
+const q2Baselines = await FileAttachment("../data/q2-pair-baselines.csv").csv({typed: true});
+const q2BaselinesHeaders = {pair_id: "Pair", station_name: "Station", annual_baseline_f: "Long-term mean (°F)",
+    baseline_gap_f: "Pair mean difference (°F)", seasonal_span_f: "Seasonal span (°F)",
+    valid_temp_days: "Valid days", calendar_days: "Calendar days"};
+const q2BaselinesColumns = Object.keys(q2BaselinesHeaders);
+const q2BaselinesCsv = d3.csvFormatRows([
+  Object.values(q2BaselinesHeaders),
+  ...q2Baselines.map(row => q2BaselinesColumns.map(column => row[column]))
+]);
+const q2BaselinesDownloadUrl = "data:text/csv;charset=utf-8," + encodeURIComponent(q2BaselinesCsv);
+
+display(Inputs.table(q2Baselines, {
+  columns: q2BaselinesColumns,
+  header: q2BaselinesHeaders,
+  rows: 6
+}));
+```
+
+${html`<a download="q2-pair-baselines.csv" href="${q2BaselinesDownloadUrl}">Download q2-pair-baselines.csv</a>`}
+
 ```js
 import {yearlyExtremes} from "../components/yearly-extremes-figure.js";
 import {yearlyFluctuation} from "../components/fluctuation-figure.js";
+const stationList = await FileAttachment("../data/q2-pair-baselines.csv").csv();
 const daily = await FileAttachment("../data/daily-temperatures.csv").csv();
 const smoothed = await FileAttachment("../data/q6-15day-average-temperatures.csv").csv();
 const round2 = value => value === null ? null : +value.toFixed(2);
@@ -104,7 +136,7 @@ const q5Headers = {
   mean_f: "Average (°F)",
   min_f: "Minimum (°F)"
 };
-const q5Rows = baselines.flatMap(station => yearlyExtremes(daily, [{...station, station: station.station_name}])
+const q5Rows = stationList.flatMap(station => yearlyExtremes(daily, [{...station, station: station.station_name}])
   .map(d => ({pair_id: station.pair_id, station_name: station.station_name, year: d.year,
     valid_days: d.valid_days, max_f: round2(d.max_f), mean_f: round2(d.mean_f), min_f: round2(d.min_f)})));
 
@@ -136,7 +168,7 @@ const q6Headers = {
   days: "Days with both values",
   value: "Largest deviation (°F)"
 };
-const q6Rows = baselines.flatMap(station => yearlyFluctuation(daily, smoothed, [station])[0]
+const q6Rows = stationList.flatMap(station => yearlyFluctuation(daily, smoothed, [station])[0]
   .map(([year, d]) => ({pair_id: station.pair_id, station_name: station.station_name, year,
     days: d.days, value: round2(d.value)})));
 
