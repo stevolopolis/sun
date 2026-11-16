@@ -17,6 +17,4 @@ Do similar average temperatures hide different extremes? We compare six weather 
 
 Q1 and Q2 have interactive D3 charts, source code, and explanations. Q5 and Q6 have static D3 charts and source code; their explanations are still to be written. Q3 and Q4 currently contain the research questions and section headings.
 
-[Q0: Raw Daily Temperatures](./milestone-3/q0) plots each station's daily temperature as an exploration aid for Q5 and Q6.
-
 [AI Use](./milestone-3/ai-use)

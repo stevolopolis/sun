@@ -10,7 +10,6 @@ export default {
       pages: [
         {name: "Intro", path: "/milestone-3/intro"},
         {name: "Data & Methods", path: "/milestone-3/data-methods"},
-        {name: "Q0: Raw Daily Temperatures", path: "/milestone-3/q0"},
         {name: "Q1: Temperature Distributions", path: "/milestone-3/q1"},
         {name: "Q2: Seasonal Patterns", path: "/milestone-3/q2"},
         {name: "Q3: Extreme Frequency", path: "/milestone-3/q3"},
