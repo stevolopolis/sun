@@ -30,5 +30,6 @@ Blank or non-finite values and the missing-value codes `999.9` and `9999.9` are 
 - [Q0](./q0) plots each station's daily TEMP as recorded, with no aggregation. It is an exploration aid for choosing the Q5 and Q6 features.
 - [Q1](./q1) computes quartiles for daily highs and lows separately. Daily ranges use the same day's MAX minus MIN when both are valid and MAX is at least MIN.
 - [Q2](./q2) pools valid TEMP observations by calendar month across the common period. The x-axis uses January through December for both hemispheres.
+- [Q5](./q5) takes, for each station and calendar year, the highest and lowest daily TEMP. A station-year with fewer than 300 valid TEMP days is treated as missing and shown as a gap.
 
 The [Milestone 2 page](../milestone-2) includes the merged source dataset. The repository's README documents how to regenerate the summary tables.
