@@ -16,7 +16,7 @@ export default {
         {name: "Q3: Extreme Frequency", path: "/milestone-3/q3"},
         {name: "Q4: Extreme Duration", path: "/milestone-3/q4"},
         {name: "Q5: Extreme Trends", path: "/milestone-3/q5"},
-        {name: "Q6: Seasonal Transitions", path: "/milestone-3/q6"},
+        {name: "Q6: Temperature Fluctuations", path: "/milestone-3/q6"},
         {name: "AI Use", path: "/milestone-3/ai-use"},
       ],
     },

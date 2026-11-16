@@ -1,4 +1,4 @@
-"""Generate the Q0, Q1 and Q2 visualization tables from the merged GSOD CSV."""
+"""Generate the Q0, Q1, Q2 and Q6 visualization tables from the merged GSOD CSV."""
 import calendar
 import csv
 import math
@@ -11,6 +11,7 @@ from pathlib import Path
 START, END = date(1973, 1, 1), date(2024, 12, 31)
 EXPECTED = (END - START).days + 1
 TOLERANCE_F = 2
+HALF_WINDOW, MIN_WINDOW_DAYS = 7, 8  # Q6: centered 15-day window, at least 8 valid days
 OUTPUT = Path(__file__).resolve().parents[1] / "src" / "data"
 
 
@@ -63,6 +64,15 @@ def summarize(source):
             row[metadata["station_id"]] = "" if value is None else value
         daily.append(row)
 
+    # Centered 15-day moving average of TEMP; the window is cut off at START and END.
+    smoothed = [{"date": row["date"]} for row in daily]
+    for metadata, _ in ordered:
+        station_id = metadata["station_id"]
+        for index, row in enumerate(smoothed):
+            window = [day[station_id] for day in daily[max(0, index - HALF_WINDOW):index + HALF_WINDOW + 1]
+                if day[station_id] != ""]
+            row[station_id] = mean(window) if len(window) >= MIN_WINDOW_DAYS else ""
+
     for metadata, days in ordered:
         ranges = []
         for record in days.values():
@@ -114,6 +124,7 @@ def summarize(source):
     write_table("q2-monthly-temperatures.csv", months)
     write_table("q2-pair-baselines.csv", pairs)
     write_table("q0-daily-temperatures.csv", daily)
+    write_table("q6-15day-average-temperatures.csv", smoothed)
 
 
 if __name__ == "__main__":
