@@ -5,14 +5,14 @@ const minDays = 300; // a year with fewer usable days is left as a gap
 const margin = {top: 24, right: 20, bottom: 40, left: 48};
 const height = 360;
 
-// For each station and year: the mean of |daily TEMP - 15-day average| over days where both exist.
+// For each station and year: the largest |daily TEMP - 15-day average| over days where both exist.
 export function yearlyFluctuation(daily, smoothed, stations) {
   return stations.map(({station_id}) => d3.rollups(
     d3.range(daily.length).filter(i => daily[i][station_id] !== "" && smoothed[i][station_id] !== ""),
     days => ({
       days: days.length,
       value: days.length < minDays ? null
-        : d3.mean(days, i => Math.abs(daily[i][station_id] - smoothed[i][station_id])),
+        : d3.max(days, i => Math.abs(daily[i][station_id] - smoothed[i][station_id])),
     }),
     i => +daily[i].date.slice(0, 4),
   ));
@@ -31,7 +31,7 @@ export function fluctuationFigure(width, daily, smoothed, stations) {
 
   const root = d3.create("div").style("display", "grid").style("gap", "12px");
   root.append("div").style("font-weight", 600)
-    .text("Yearly mean absolute deviation of daily temperature from its 15-day average");
+    .text("Yearly largest deviation of daily temperature from its 15-day average");
   const legend = root.append("div").style("display", "flex").style("flex-wrap", "wrap")
     .style("gap", "4px 20px").style("font-size", "12px");
   stations.forEach((station, k) => {
@@ -53,7 +53,7 @@ export function fluctuationFigure(width, daily, smoothed, stations) {
     .call(g => g.selectAll(".tick line").clone().attr("x2", width - margin.left - margin.right)
       .attr("opacity", 0.13));
   svg.append("text").attr("x", margin.left).attr("y", 12).attr("fill", "currentColor")
-    .attr("font-size", 12).text("Mean absolute deviation (°F)");
+    .attr("font-size", 12).text("Largest absolute deviation (°F)");
   svg.append("text").attr("x", width - margin.right).attr("y", height - 6)
     .attr("text-anchor", "end").attr("fill", "currentColor").attr("font-size", 12).text("Year");
 
