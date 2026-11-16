@@ -1,0 +1,25 @@
+PAIR_ID,PAIR_THEME,STATION_ROLE,STATION,EXTREME_TYPE,SPELL_COUNT,TOTAL_EXTREME_DAYS,AVG_DURATION,LONGEST_SPELL,AVG_SEVERITY,AVG_RECOVERY
+1,Temperate Coastal Maritime Fog Belt vs. Continental Severe Seasons,Station A,"ARCATA EUREKA AIRPORT, CA US",Extreme heat,5,7,1.4,2,2.4,5
+1,Temperate Coastal Maritime Fog Belt vs. Continental Severe Seasons,Station A,"ARCATA EUREKA AIRPORT, CA US",Extreme cold,0,0,0,0,0,
+1,Temperate Coastal Maritime Fog Belt vs. Continental Severe Seasons,Station B,"DES MOINES INTERNATIONAL AIRPORT, IA US",Extreme heat,486,1759,3.6,31,2.4,4.8
+1,Temperate Coastal Maritime Fog Belt vs. Continental Severe Seasons,Station B,"DES MOINES INTERNATIONAL AIRPORT, IA US",Extreme cold,63,130,2.1,9,3.9,7.7
+2,Coastal California Maritime vs. Midwestern Four-Season Extremes,Station A,"SAN FRANCISCO INTERNATIONAL AIRPORT, CA US",Extreme heat,143,323,2.3,7,2.7,3.1
+2,Coastal California Maritime vs. Midwestern Four-Season Extremes,Station A,"SAN FRANCISCO INTERNATIONAL AIRPORT, CA US",Extreme cold,0,0,0,0,0,
+2,Coastal California Maritime vs. Midwestern Four-Season Extremes,Station B,"ST LOUIS LAMBERT INTERNATIONAL AIRPORT, MO US",Extreme heat,650,3081,4.7,36,2.8,4.6
+2,Coastal California Maritime vs. Midwestern Four-Season Extremes,Station B,"ST LOUIS LAMBERT INTERNATIONAL AIRPORT, MO US",Extreme cold,7,15,2.1,3,3.8,10
+3,Northern vs. Southern Hemisphere Seasonal Phase Inversion,Station A,"SEATTLE TACOMA AIRPORT, WA US",Extreme heat,115,298,2.6,7,2.4,4.1
+3,Northern vs. Southern Hemisphere Seasonal Phase Inversion,Station A,"SEATTLE TACOMA AIRPORT, WA US",Extreme cold,0,0,0,0,0,
+3,Northern vs. Southern Hemisphere Seasonal Phase Inversion,Station B,"CHRISTCHURCH INTERNATIONAL, NZ",Extreme heat,55,62,1.1,3,2.5,4.6
+3,Northern vs. Southern Hemisphere Seasonal Phase Inversion,Station B,"CHRISTCHURCH INTERNATIONAL, NZ",Extreme cold,0,0,0,0,0,
+4,"Equatorial Highland ""Eternal Spring"" vs. Subtropical Four Seasons",Station A,"BOLE INTERNATIONAL, ET",Extreme heat,1,1,1,1,1.4,1
+4,"Equatorial Highland ""Eternal Spring"" vs. Subtropical Four Seasons",Station A,"BOLE INTERNATIONAL, ET",Extreme cold,0,0,0,0,0,
+4,"Equatorial Highland ""Eternal Spring"" vs. Subtropical Four Seasons",Station B,"ATLANTA HARTSFIELD JACKSON INTERNATIONAL AIRPORT, GA US",Extreme heat,481,2850,5.9,52,1.7,3
+4,"Equatorial Highland ""Eternal Spring"" vs. Subtropical Four Seasons",Station B,"ATLANTA HARTSFIELD JACKSON INTERNATIONAL AIRPORT, GA US",Extreme cold,0,0,0,0,0,
+5,Subpolar Oceanic Moderation vs. Continental Subarctic Severe Winter,Station A,"REYKJAVIK, IC",Extreme heat,0,0,0,0,0,
+5,Subpolar Oceanic Moderation vs. Continental Subarctic Severe Winter,Station A,"REYKJAVIK, IC",Extreme cold,0,0,0,0,0,
+5,Subpolar Oceanic Moderation vs. Continental Subarctic Severe Winter,Station B,"CARIBOU WEATHER FORECAST OFFICE, ME US",Extreme heat,79,179,2.3,5,1.2,5.4
+5,Subpolar Oceanic Moderation vs. Continental Subarctic Severe Winter,Station B,"CARIBOU WEATHER FORECAST OFFICE, ME US",Extreme cold,346,718,2.1,9,5.5,7.5
+6,Arid Subtropical Desert vs. Humid Subtropical Gulf Delta,Station A,"TUCSON INTERNATIONAL AIRPORT, AZ US",Extreme heat,495,8675,17.5,157,4.3,4.8
+6,Arid Subtropical Desert vs. Humid Subtropical Gulf Delta,Station A,"TUCSON INTERNATIONAL AIRPORT, AZ US",Extreme cold,0,0,0,0,0,
+6,Arid Subtropical Desert vs. Humid Subtropical Gulf Delta,Station B,"NEW ORLEANS AIRPORT, LA US",Extreme heat,610,4906,8,114,1.6,2.9
+6,Arid Subtropical Desert vs. Humid Subtropical Gulf Delta,Station B,"NEW ORLEANS AIRPORT, LA US",Extreme cold,0,0,0,0,0,
