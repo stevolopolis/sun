@@ -139,7 +139,8 @@ export function transitionFigure(width, rows, stations, state) {
     stations.forEach((station, k) => key(legend,
       svg => svg.append("line").attr("x1", 1).attr("x2", 21).attr("y1", 5).attr("y2", 5)
         .attr("stroke", colors[k]).attr("stroke-width", 2),
-      `${station.station}: average ${degrees(averages[k])}`));
+      averages[k] === undefined ? `${station.station}: no data in this span`
+        : `${station.station}: average ${degrees(averages[k])}`));
     key(legend, svg => svg.append("line").attr("x1", 2).attr("x2", 21).attr("y1", 5).attr("y2", 5)
       .attr("stroke", "currentColor").attr("stroke-width", 2.5).attr("stroke-dasharray", "0.1 6")
       .attr("stroke-linecap", "round"), "dotted: average over the span shown");
@@ -197,6 +198,7 @@ export function transitionFigure(width, rows, stations, state) {
         .x(i => x(dates[i])).y(i => y(values[i]));
       plot.append("path").attr("d", line(indices)).attr("fill", "none").attr("stroke", colors[k])
         .attr("stroke-width", state.window ? 2 : 1.5);
+      if (averages[k] === undefined) return;
       plot.append("line").attr("x1", margin.left).attr("x2", width - margin.right)
         .attr("y1", y(averages[k])).attr("y2", y(averages[k])).attr("stroke", colors[k])
         .attr("stroke-width", 2.5).attr("stroke-dasharray", "0.1 6")
