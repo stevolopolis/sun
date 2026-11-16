@@ -2,6 +2,18 @@
 
 We use daily NOAA Global Surface Summary of the Day (GSOD) observations for 12 stations grouped into six pairs. The analysis covers January 1, 1973 through December 31, 2024. The source file also contains part of 2025, which we excluded to use the same complete calendar years for every station.
 
+### Raw Data Compilation & Augmentation
+
+To construct our unified 12-station dataset (`gsod_all_12_stations_1973_2025.csv`, comprising 224,732 daily observations spanning 1973 through 2025), we extracted and processed station records from NOAA's Global Surface Summary of the Day (GSOD) archive through the following steps:
+
+1. **Candidate Station Selection**: We screened NOAA's global station directory (`isd-history.csv`, containing over 9,000 worldwide stations) to isolate candidate observatories with near-unbroken daily observation histories from January 1973 onward, focusing on high-reliability airport weather stations and national observatories. From these candidates, we paired stations that share nearly identical long-term annual mean temperatures (differing by at most 2 °F) but exhibit distinct climate drivers (such as coastal maritime moderation vs. continental extremes, seasonal phase inversion, elevation buffers, and desert aridity).
+2. **Chronological Consolidation**: For each of the 12 selected stations, 53 individual annual GSOD files (1973 through 2025) were downloaded and concatenated chronologically into single station-level CSV records, which were then merged into one multi-station dataset.
+3. **Schema Harmonization**: Column headers and data fields were aligned and standardized across all 12 stations and 53 observation years. The original NOAA measurement units (Fahrenheit for temperatures) and sentinel missing-data flags (`999.9` and `9999.9`) were preserved intact so that downstream analyses could explicitly handle missing measurements without distortion.
+4. **Structural Augmentation (Pair Metadata Tags)**: To streamline paired comparisons and filtering across research questions without requiring recurring lookup joins, three metadata columns were tagged directly onto every daily record:
+   - `PAIR_ID`: Numeric identifier indicating which of the six matched pairs the station belongs to (`1` through `6`).
+   - `PAIR_THEME`: Descriptive label for the climate contrast being evaluated (e.g., *Temperate Coastal Maritime Fog Belt vs. Continental Severe Seasons*).
+   - `STATION_ROLE`: Categorical assignment (`Station A` vs. `Station B`) to consistently differentiate the baseline/maritime station from the comparison/continental station across visual encodings.
+
 ## Station pairs and coverage
 
 For each station, the long-term mean weights each valid daily mean temperature (TEMP) equally. A pair meets our working matching criterion if the two means differ by at most 2 °F. All six pairs meet this criterion, with gaps from 0.11 to 0.47 °F. The pair gap appears on both station rows.
@@ -34,7 +46,6 @@ Blank or non-finite values and the missing-value codes `999.9` and `9999.9` are 
 
 The [Milestone 2 page](../milestone-2) includes the merged source dataset. The repository's README documents how to regenerate the summary tables.
 
-${html`<a download="q4-extreme-spells.csv" href="${await FileAttachment("../data/q4-extreme-spells.csv").url()}">Download Full Extreme Spells Dataset (CSV)</a>`}
 ### Q1
 
 We started with the [merged source dataset](../milestone-2), which has one row per station per day. We used `STATION` and `DATE` to group records by station and identify each observation day, then kept only records from 1973 through 2024 because 2025 is incomplete. For each station, we excluded blank values and NOAA missing-value codes (`999.9` and `9999.9`) separately for daily highs (`MAX`) and lows (`MIN`). We calculated the daily range as `MAX − MIN` on dates when both values were valid and the high was at least as large as the low.
@@ -250,3 +261,4 @@ view(Inputs.table(selectedSpells, {
   rows: 6
 }))
 ```
+${html`<a download="q4-extreme-spells.csv" href="${await FileAttachment("../data/q4-extreme-spells.csv").url()}">Download Full Extreme Spells Dataset (CSV)</a>`}
