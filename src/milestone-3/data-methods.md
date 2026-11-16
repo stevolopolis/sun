@@ -214,3 +214,39 @@ view(Inputs.table(selectedSpells, {
 ```
 
 ${html`<a download="q4-extreme-spells.csv" href="${await FileAttachment("../data/q4-extreme-spells.csv").url()}">Download Full Extreme Spells Dataset (CSV)</a>`}
+### Q1
+
+We started with the [merged source dataset](../milestone-2), which has one row per station per day. We used `STATION` and `DATE` to group records by station and identify each observation day, then kept only records from 1973 through 2024 because 2025 is incomplete. For each station, we excluded blank values and NOAA missing-value codes (`999.9` and `9999.9`) separately for daily highs (`MAX`) and lows (`MIN`). We calculated the daily range as `MAX − MIN` on dates when both values were valid and the high was at least as large as the low.
+
+For each station, we counted the valid days and calculated the 25th percentile, median, and 75th percentile for daily highs, daily lows, and daily ranges. We wrote one row per station and measure to `q1-temperature-distributions.csv`, for 36 rows in total.
+
+[Python script for Q1](https://github.com/daeunppark/sun/blob/main/scripts/summarize-temperatures.py#L58-L76)
+
+#### Final table
+
+```js
+const q1Data = await FileAttachment("../data/q1-temperature-distributions.csv").csv({typed: true});
+const q1Headers = {
+  pair_id: "Pair",
+  station_name: "Station",
+  metric: "Measure",
+  valid_days: "Valid days",
+  q1_f: "25th percentile (°F)",
+  median_f: "Median (°F)",
+  q3_f: "75th percentile (°F)"
+};
+const q1Columns = Object.keys(q1Headers);
+const q1Csv = d3.csvFormatRows([
+  Object.values(q1Headers),
+  ...q1Data.map(row => q1Columns.map(column => row[column]))
+]);
+const q1DownloadUrl = "data:text/csv;charset=utf-8," + encodeURIComponent(q1Csv);
+
+display(Inputs.table(q1Data, {
+  columns: q1Columns,
+  header: q1Headers,
+  rows: 6
+}));
+```
+
+${html`<a download="q1-temperature-distributions.csv" href="${q1DownloadUrl}">Download q1-temperature-distributions.csv</a>`}
