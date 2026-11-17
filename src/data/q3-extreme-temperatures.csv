@@ -1,0 +1,13 @@
+PAIR_ID,PAIR_THEME,STATION_ROLE,STATION,HOT_DAYS,COLD_NIGHTS,VALID_MAX_DAYS,VALID_MIN_DAYS,HOT_DAY_PERCENT,COLD_NIGHT_PERCENT
+1,Temperate Coastal Maritime Fog Belt vs. Continental Severe Seasons,Station A,"ARCATA EUREKA AIRPORT, CA US",8,795,19220,19220,0.04,4.14
+1,Temperate Coastal Maritime Fog Belt vs. Continental Severe Seasons,Station B,"DES MOINES INTERNATIONAL AIRPORT, IA US",1439,6813,19232,19232,7.48,35.43
+2,Coastal California Maritime vs. Midwestern Four-Season Extremes,Station A,"SAN FRANCISCO INTERNATIONAL AIRPORT, CA US",267,34,19232,19232,1.39,0.18
+2,Coastal California Maritime vs. Midwestern Four-Season Extremes,Station B,"ST LOUIS LAMBERT INTERNATIONAL AIRPORT, MO US",2648,4633,19232,19232,13.77,24.09
+3,Northern vs. Southern Hemisphere Seasonal Phase Inversion,Station A,"SEATTLE TACOMA AIRPORT, WA US",239,1448,19232,19232,1.24,7.53
+3,Northern vs. Southern Hemisphere Seasonal Phase Inversion,Station B,"CHRISTCHURCH INTERNATIONAL, NZ",118,2026,19169,19169,0.62,10.57
+4,"Equatorial Highland ""Eternal Spring"" vs. Subtropical Four Seasons",Station A,"BOLE INTERNATIONAL, ET",8,0,13349,13349,0.06,0
+4,"Equatorial Highland ""Eternal Spring"" vs. Subtropical Four Seasons",Station B,"ATLANTA HARTSFIELD JACKSON INTERNATIONAL AIRPORT, GA US",2290,2177,19232,19232,11.91,11.32
+5,Subpolar Oceanic Moderation vs. Continental Subarctic Severe Winter,Station A,"REYKJAVIK, IC",6,6222,19147,19147,0.03,32.5
+5,Subpolar Oceanic Moderation vs. Continental Subarctic Severe Winter,Station B,"CARIBOU WEATHER FORECAST OFFICE, ME US",123,9402,19230,19230,0.64,48.89
+6,Arid Subtropical Desert vs. Humid Subtropical Gulf Delta,Station A,"TUCSON INTERNATIONAL AIRPORT, AZ US",8289,645,19228,19228,43.11,3.35
+6,Arid Subtropical Desert vs. Humid Subtropical Gulf Delta,Station B,"NEW ORLEANS AIRPORT, LA US",4064,447,19229,19229,21.13,2.32

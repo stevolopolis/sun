@@ -76,3 +76,7 @@ export function seasonalChart(width, rows, allRows) {
   });
   return svg.node();
 }
+
+// Added by Abrar for q3 and q4
+export {extremesChart} from "./extreme-charts.js";
+export {spellTimelineChart} from "./spell-charts.js";

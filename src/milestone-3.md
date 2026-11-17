@@ -16,6 +16,6 @@ Do similar average temperatures hide different extremes? We compare six weather 
 6. ~~Seasonal transitions~~ [Temperature Fluctuations](./milestone-3/q6) asks how day-to-day temperature fluctuation has changed over time at each station.
     - Q6 has changed from studying the seasonal transitions between pairs to studying the temperature fluctuations between pairs to avoid overlapping with Q2. 
 
-Q1 and Q2 have interactive D3 charts, source code, and explanations. Q5 and Q6 have static D3 charts, source code, and explanations. Q3 and Q4 currently contain the research questions and section headings.
+Q1–Q4 have interactive D3 charts, source code, and explanations. Q5 and Q6 have static D3 charts, source code, and explanations.
 
 [AI Use](./milestone-3/ai-use)
